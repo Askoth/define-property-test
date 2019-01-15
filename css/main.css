@@ -30,6 +30,10 @@ html, body {
     width: 1024px;
 }
 
+.content {
+    padding-bottom: 50px;
+}
+
 .header__background {
     background: #FFF;
     border-bottom: var(--input-gray) 2px solid;
@@ -109,7 +113,7 @@ html, body {
 .report-table__row td,
 .report-table__row th {
     text-align: left;
-    padding: 10px 0;
+    padding: 10px;
 }
 
 .report-table__row td:first-child,
