@@ -24,13 +24,14 @@ class Table {
             const rows = filteredItems.map((item) => {
                 const { rating, comment, computed_browser } = item;
                 const { Browser: browser, Platform: platform, Version: version } = computed_browser;
+                const device = ['Android', 'iOS'].indexOf(platform) != -1 ? 'Mobile' : 'Desktop';
 
                 const dataToRender = {
                     rating,
                     comment,
                     browser,
                     version,
-                    device: 'nao sei',
+                    device,
                     platform,
                 };
 
