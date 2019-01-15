@@ -1,0 +1,12 @@
+{
+  "name": "define-property-test",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:Askoth/define-property-test.git",
+  "author": "Marcelo Oliveira <askoth@gmail.com>",
+  "license": "UNLICENSED",
+  "private": "true",
+  "devDependencies": {
+    "jest": "^23.6.0"
+  }
+}
