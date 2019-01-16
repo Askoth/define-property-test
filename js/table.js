@@ -22,18 +22,8 @@ class Table {
 
         if (filteredItems.length) {
             const rows = filteredItems.map((item) => {
-                const { rating, comment, computed_browser } = item;
-                const { Browser: browser, Platform: platform, Version: version } = computed_browser;
-                const device = ['Android', 'iOS'].indexOf(platform) != -1 ? 'Mobile' : 'Desktop';
 
-                const dataToRender = {
-                    rating,
-                    comment,
-                    browser,
-                    version,
-                    device,
-                    platform,
-                };
+                const dataToRender = this.prepareDataForTemplate(item);
 
                 const row = this.templates.content.replace(/{{(.*?)}}/g, (match, match2) => {
                     return dataToRender[match2.trim()]
@@ -48,6 +38,21 @@ class Table {
         }
 
         this.el.querySelector('tbody').innerHTML = result;
+    }
+
+    prepareDataForTemplate (item) {
+        const { rating, comment, computed_browser } = item;
+        const { Browser: browser, Platform: platform, Version: version } = computed_browser;
+        const device = ['Android', 'iOS'].indexOf(platform) != -1 ? 'Mobile' : 'Desktop';
+
+        return {
+            rating,
+            comment,
+            browser,
+            version,
+            device,
+            platform,
+        };
     }
 
     filterItems({ filters, items }) {

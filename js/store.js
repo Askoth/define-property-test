@@ -1,7 +1,7 @@
 class Store {
     constructor (data) {
 
-        this.data = createObservers(data, this)
+        this.data = Store.createObservers(data, this)
 
         this.callbacks = new Set();
     }
@@ -10,17 +10,17 @@ class Store {
         this.callbacks.add(cb);
     }
 
-    stateChanged() {
-        const data = this.removeObservers(this.data);
+    _stateChanged() {
+        const data = this._removeObservers(this.data);
         this.callbacks.forEach(cb => cb(data))
     }
 
-    removeObservers() {
+    _removeObservers() {
         return JSON.parse(JSON.stringify(this.data))
     }
 }
 
-function createObservers(data, instance) {
+Store.createObservers = function (data, instance) {
     let obj = {};
 
     Object.keys(data).forEach((key) => {
@@ -32,7 +32,7 @@ function createObservers(data, instance) {
             },
             set(newValue) {
                 value = newValue;
-                instance.stateChanged()
+                instance._stateChanged()
             }
         });
     })

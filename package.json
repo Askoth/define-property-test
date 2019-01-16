@@ -5,8 +5,18 @@
   "repository": "git@github.com:Askoth/define-property-test.git",
   "author": "Marcelo Oliveira <askoth@gmail.com>",
   "license": "UNLICENSED",
-  "private": "true",
+  "private": true,
+  "scripts": {
+    "eslint": "npx eslint js/**/*.js tests/**/*.js",
+    "jest": "npx jest tests/"
+  },
   "devDependencies": {
-    "jest": "^23.6.0"
+    "@babel/core": "^7.2.2",
+    "@babel/preset-env": "^7.2.3",
+    "babel-core": "^7.0.0-bridge.0",
+    "babel-jest": "^23.6.0",
+    "eslint": "^5.12.0",
+    "jest": "^23.6.0",
+    "regenerator-runtime": "^0.13.1"
   }
 }
