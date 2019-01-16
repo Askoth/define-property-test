@@ -5,6 +5,7 @@ class Table {
         this.templates = {
             content: document.querySelector('#table-with-content').innerHTML,
             noContent: document.querySelector('#table-no-content').innerHTML,
+            reportLabel: document.querySelector('#report-label').innerHTML,
         }
     }
 
@@ -15,19 +16,21 @@ class Table {
                 text,
                 scores,
             },
-            items: reports.items
+            items: this.prepareDataForTemplate(reports.items)
         });
 
         let result = '';
 
         if (filteredItems.length) {
-            const rows = filteredItems.map((item) => {
+            const rows = filteredItems.map((dataToRender) => {
 
-                const dataToRender = this.prepareDataForTemplate(item);
+                // add sub template
+                dataToRender.reportLabels = dataToRender.labels.reduce((prev, label) => {
+                    prev += this.populateTemplate(this.templates.reportLabel, {label});
+                    return prev;
+                }, '')
 
-                const row = this.templates.content.replace(/{{(.*?)}}/g, (match, match2) => {
-                    return dataToRender[match2.trim()]
-                });
+                const row = this.populateTemplate(this.templates.content, dataToRender);
 
                 return row
             })
@@ -40,19 +43,28 @@ class Table {
         this.el.querySelector('tbody').innerHTML = result;
     }
 
-    prepareDataForTemplate (item) {
-        const { rating, comment, computed_browser } = item;
-        const { Browser: browser, Platform: platform, Version: version } = computed_browser;
-        const device = ['Android', 'iOS'].indexOf(platform) != -1 ? 'Mobile' : 'Desktop';
+    populateTemplate(str, data) {
+        return str.replace(/{{(.*?)}}/g, (match, match2) => {
+            return data[match2.trim()]
+        })
+    }
 
-        return {
-            rating,
-            comment,
-            browser,
-            version,
-            device,
-            platform,
-        };
+    prepareDataForTemplate (items) {
+        return items.map((item) => {
+            const { rating, comment, labels, computed_browser } = item;
+            const { Browser: browser, Platform: platform, Version: version } = computed_browser;
+            const device = ['Android', 'iOS'].indexOf(platform) != -1 ? 'Mobile' : 'Desktop';
+
+            return {
+                rating,
+                comment,
+                browser,
+                labels,
+                version,
+                device,
+                platform,
+            };
+        })
     }
 
     filterItems({ filters, items }) {
@@ -61,7 +73,16 @@ class Table {
         const text = filters.text.trim();
 
         if (text.length) {
-            filteredItems = filteredItems.filter((item) => item.comment.indexOf(filters.text) != -1);
+            filteredItems = filteredItems.filter((item) => {
+                const isLabelMatch = item.labels.some((label) => label.indexOf(filters.text) != -1);
+
+                return isLabelMatch ||
+                    item.comment.indexOf(filters.text) != -1 ||
+                    item.browser.indexOf(filters.text) != -1 ||
+                    item.version.indexOf(filters.text) != -1 ||
+                    item.device.indexOf(filters.text) != -1 ||
+                    item.platform.indexOf(filters.text) != -1
+            });
         }
 
         return filteredItems;

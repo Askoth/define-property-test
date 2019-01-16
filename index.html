@@ -71,12 +71,22 @@
             <td>
                 <div class="score">{{rating}}</div>
             </td>
-            <td>{{comment}}</td>
+            <td>
+                {{comment}}
+                {{reportLabels}}
+            </td>
             <td>{{browser}}<br />{{version}}</td>
             <td>{{device}}</td>
             <td>{{platform}}</td>
         </tr>
     </template>
+
+    <template id="report-label">
+        <span class="report__label">
+            {{ label }}
+        </span>
+    </template>
+
     <template id="table-no-content">
         <tr class="report-table__row report-table__row--no-data">
             <td colspan="5">

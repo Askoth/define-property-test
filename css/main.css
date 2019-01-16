@@ -121,4 +121,11 @@ html, body {
     text-align: center;
 }
 
-
+.report__label {
+    background: #666;
+    color: #FFF;
+    border-radius: 4px;
+    padding: 3px 6px;
+    font-size: 12px;
+    font-family: Arial;
+}

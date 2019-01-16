@@ -32,5 +32,5 @@ ajax.fetchJson({
         store
     });
 }).catch((err) => {
-    throw new Error(err);
+    throw err;
 });
