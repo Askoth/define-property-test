@@ -130,3 +130,16 @@ html, body {
     font-family: Arial;
     margin-right: 5px;
 }
+
+.report__label--compliment {
+    background: #109600;
+}
+.report__label--bug {
+    background: #e80000;
+}
+.report__label--suggestion {
+    background: #001296;
+}
+.report__label--question {
+    background: #780096;
+}
