@@ -2,9 +2,12 @@ import Table from '../js/table.js'
 
 describe('Testing Table view', () => {
     test('create instance', () => {
+        const mockFn = jest.fn();
+
         document.querySelector = (sel) => {
             return {
-                innerHTML: `${sel}`
+                innerHTML: `${sel}`,
+                addEventListener: mockFn,
             }
         }
 
@@ -15,6 +18,7 @@ describe('Testing Table view', () => {
         expect(obj).toEqual({
            el: {
              innerHTML: '#test',
+             addEventListener: mockFn,
            },
            templates: {
              content: '#table-with-content',
@@ -35,6 +39,11 @@ describe('Testing Table view', () => {
             },
             "rating": 5,
             "labels": ["bug"],
+            "images": {
+                "cropped": {
+                    "url": "//kitten.com/cropped-image-url.png"
+                }
+            }
         }];
 
         let data = Table.prototype.prepareDataForTemplate(mockedItems);
@@ -47,6 +56,8 @@ describe('Testing Table view', () => {
             platform: 'MacOSX',
             rating: 5,
             version: '32.0',
+            i: 0,
+            image: "//kitten.com/cropped-image-url.png",
         }];
 
         // jest fails to find keys that are undefined
@@ -76,7 +87,7 @@ describe('Testing Table view', () => {
             items: getMockedItems(),
         }]);
 
-        expect(filtered).toEqual([{"browser": "Firefox", "comment": "testing one two three four five six", "device": "Desktop", "labels": ["bug", "marc"], "platform": "MacOSX", "rating": 1, "version": "28.0"}]);
+        expect(filtered).toEqual([{"browser": "Firefox", "comment": "testing one two three four five six", "device": "Desktop", "i": 2, "image": "//kitten.com/cropped-image-url.png", "labels": ["bug", "marc"], "platform": "MacOSX", "rating": 1, "version": "28.0"}]);
     })
 
     test('filter data score but text is empty', () => {
@@ -93,7 +104,7 @@ describe('Testing Table view', () => {
             items: getMockedItems(),
         }]);
 
-        expect(filtered).toEqual([{"browser": "Chrome", "comment": "testing one two three", "device": "Desktop", "labels": ["bug"], "platform": "MacOSX", "rating": 1, "version": "32.0"}, {"browser": "Firefox", "comment": "testing one two three four five six", "device": "Desktop", "labels": ["bug", "marc"], "platform": "MacOSX", "rating": 1, "version": "28.0"}]);
+        expect(filtered).toEqual([{"browser": "Chrome", "comment": "testing one two three", "device": "Desktop", "i": 0, "image": "//kitten.com/cropped-image-url.png", "labels": ["bug"], "platform": "MacOSX", "rating": 1, "version": "32.0"}, {"browser": "Firefox", "comment": "testing one two three four five six", "device": "Desktop", "i": 2, "image": "//kitten.com/cropped-image-url.png", "labels": ["bug", "marc"], "platform": "MacOSX", "rating": 1, "version": "28.0"}]);
     })
 
     test('filter data text on browser', () => {
@@ -110,7 +121,7 @@ describe('Testing Table view', () => {
             items: getMockedItems(),
         }]);
 
-        expect(filtered).toEqual([{"browser": "Chrome", "comment": "testing one two three", "device": "Desktop", "labels": ["bug"], "platform": "MacOSX", "rating": 1, "version": "32.0"}]);
+        expect(filtered).toEqual([{"browser": "Chrome", "comment": "testing one two three", "device": "Desktop", "i": 0, "image": "//kitten.com/cropped-image-url.png", "labels": ["bug"], "platform": "MacOSX", "rating": 1, "version": "32.0"}]);
     })
 
     test('filter data text on version', () => {
@@ -127,7 +138,7 @@ describe('Testing Table view', () => {
             items: getMockedItems(),
         }]);
 
-        expect(filtered).toEqual([{"browser": "Safari", "comment": "testing one two three four", "device": "Mobile", "labels": ["compliment"], "platform": "iOS", "rating": 2, "version": "7.0"}]);
+        expect(filtered).toEqual([{"browser": "Safari", "comment": "testing one two three four", "device": "Mobile", "i": 1, "image": "//kitten.com/cropped-image-url.png", "labels": ["compliment"], "platform": "iOS", "rating": 2, "version": "7.0"}]);
     })
 
     test('filter data text on platform', () => {
@@ -144,7 +155,7 @@ describe('Testing Table view', () => {
             items: getMockedItems(),
         }]);
 
-        expect(filtered).toEqual([{"browser": "Safari", "comment": "testing one two three four", "device": "Mobile", "labels": ["compliment"], "platform": "iOS", "rating": 2, "version": "7.0"}]);
+        expect(filtered).toEqual([{"browser": "Safari", "comment": "testing one two three four", "device": "Mobile", "i": 1, "image": "//kitten.com/cropped-image-url.png", "labels": ["compliment"], "platform": "iOS", "rating": 2, "version": "7.0"}]);
     })
 
     test('filter data text on device', () => {
@@ -161,7 +172,7 @@ describe('Testing Table view', () => {
             items: getMockedItems(),
         }]);
 
-        expect(filtered).toEqual([{"browser": "Safari", "comment": "testing one two three four", "device": "Mobile", "labels": ["compliment"], "platform": "iOS", "rating": 2, "version": "7.0"}]);
+        expect(filtered).toEqual([{"browser": "Safari", "comment": "testing one two three four", "device": "Mobile", "i": 1, "image": "//kitten.com/cropped-image-url.png", "labels": ["compliment"], "platform": "iOS", "rating": 2, "version": "7.0"}]);
     })
 
     test('filter data text on labels', () => {
@@ -178,7 +189,7 @@ describe('Testing Table view', () => {
             items: getMockedItems(),
         }]);
 
-        expect(filtered).toEqual([{"browser": "Firefox", "comment": "testing one two three four five six", "device": "Desktop", "labels": ["bug", "marc"], "platform": "MacOSX", "rating": 1, "version": "28.0"}]);
+        expect(filtered).toEqual([{"browser": "Firefox", "comment": "testing one two three four five six", "device": "Desktop", "i": 2, "image": "//kitten.com/cropped-image-url.png", "labels": ["bug", "marc"], "platform": "MacOSX", "rating": 1, "version": "28.0"}]);
     })
 });
 
@@ -196,6 +207,11 @@ function getMockedItems () {
                 FullBrowser: 'Chrome'
             },
             labels: ['bug'],
+            images: {
+                cropped: {
+                    url: '//kitten.com/cropped-image-url.png'
+                }
+            }
         },
         {
             rating: 2,
@@ -207,6 +223,11 @@ function getMockedItems () {
                 FullBrowser: 'Safari'
             },
             labels: ['compliment'],
+            images: {
+                cropped: {
+                    url: '//kitten.com/cropped-image-url.png'
+                }
+            }
         },
         {
             rating: 1,
@@ -218,6 +239,11 @@ function getMockedItems () {
                 FullBrowser: 'Firefox'
             },
             labels: ['bug', 'marc'],
+            images: {
+                cropped: {
+                    url: '//kitten.com/cropped-image-url.png'
+                }
+            }
         }
     ]);
 }

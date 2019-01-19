@@ -2,17 +2,59 @@ class Store {
     constructor (data) {
 
         this.data = Store.createObservers(data, this)
+        this._changeKeys = [];
+        this._eventLoop = setInterval(() => {
+            this._execCallbacks();
+        }, 10)
 
         this.callbacks = new Set();
     }
 
-    watch(cb) {
-        this.callbacks.add(cb);
+    watch(props, cb) {
+        const unsubscribeId = +(new Date());
+
+        props.forEach((prop) => {
+            this.callbacks[prop] = this.callbacks[prop] || {};
+
+            this.callbacks[prop][unsubscribeId] = cb;
+        })
+
+        return unsubscribeId;
     }
 
-    _stateChanged() {
+    _logChangedStateKey(key) {
+        this._changeKeys.push(key);
+    }
+
+    _execCallbacks() {
+
+        if (this._changeKeys.length < 1) {
+            return;
+        }
+
+        const changedKeys = [...this._changeKeys];
+        this._changeKeys.length = 0;
+
         const data = this._removeObservers(this.data);
-        this.callbacks.forEach(cb => cb(data))
+        const callbacksToExecute = new Set();
+
+        changedKeys.forEach((key) => {
+            if (!this.callbacks[key]) {
+                // no callback assigned to this key change
+                return;
+            }
+
+            Object.keys(this.callbacks[key]).forEach((id) => {
+                const cb = this.callbacks[key][id];
+                callbacksToExecute.add(cb);
+            })
+        })
+
+        // Set guarantees a callback function will execute only once
+        // even if it depends on more than one prop
+        callbacksToExecute.forEach((cb) => {
+            cb(data);
+        })
     }
 
     _removeObservers() {
@@ -31,8 +73,8 @@ Store.createObservers = function (data, instance) {
                 return value;
             },
             set(newValue) {
+                instance._logChangedStateKey(key);
                 value = newValue;
-                instance._stateChanged()
             }
         });
     })

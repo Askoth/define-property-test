@@ -121,26 +121,10 @@ html, body {
     text-align: center;
 }
 
-.report-table__cell {
-    position: relative;
-}
-
 .report-image-icon {
     width: 25px;
     display: inline-block;
     vertical-align: middle;
-}
-
-.report-image-content {
-    display: none;
-    position: absolute;
-    padding: 10px;
-    background: #FFF;
-    z-index: 1;
-}
-
-.report-image-icon:hover ~ .report-image-content {
-    display: block;
 }
 
 .report__label {
@@ -164,4 +148,43 @@ html, body {
 }
 .report__label--question {
     background: #780096;
+}
+
+.modal__container {
+    position: fixed;
+    background: rgba(0, 0, 0, 0.7);
+    z-index: 1;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+
+.modal__panel {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+}
+
+.modal__close {
+    position: absolute;
+    right: 20px;
+    top: 20px;
+    border: none;
+    background: #000;
+    color: #FFF;
+    border-radius: 50%;
+    font-size: 16px;
+    padding: 10px;
+    width: 40px;
+    height: 40px;
+}
+.modal__content {
+    display: block;
+    padding: 10px;
+    background: #FFF;
+    max-width: calc(100vw - 30px);
+    max-height: calc(100vh - 30px);
 }

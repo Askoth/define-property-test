@@ -1,7 +1,7 @@
 module.exports = {
   parserOptions: {
-    ecmaVersion: 6,
-    sourceType: 'module'
+    ecmaVersion: 2018,
+    sourceType: 'module',
   },
   env: {
     browser: true
@@ -24,6 +24,7 @@ module.exports = {
         describe: true,
         test: true,
         expect: true,
+        jest: true,
       }
     }
   ]

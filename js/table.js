@@ -1,5 +1,9 @@
-class Table {
+import View from './view.js'
+
+class Table extends View {
     constructor ({el}) {
+        super();
+
         this.el = document.querySelector(el);
 
         this.templates = {
@@ -7,32 +11,6 @@ class Table {
             noContent: document.querySelector('#table-no-content').innerHTML,
             reportLabel: document.querySelector('#report-label').innerHTML,
         }
-
-        this.el.addEventListener('mouseover', ({ target }) => {
-            if (target.classList.contains('report-image-icon')) {
-                const { innerHeight } = window;
-                const { x, width, y, height } = target.getBoundingClientRect();
-                const { x: cellX } = target.parentNode.getBoundingClientRect();
-                const cameraPos = y + height;
-
-                const imageContainer = document.querySelector(`#${target.getAttribute('data-target')}`);
-
-                imageContainer.style.bottom = null;
-                imageContainer.style.top = null;
-                imageContainer.style.left = null;
-
-                const { y: imgY, height: imageH } = imageContainer.getBoundingClientRect();
-
-                imageContainer.style.left = `${x + width - cellX}px`;
-
-                if (innerHeight < imgY + imageH) {
-                    imageContainer.style.bottom = '0';
-                } else {
-                    imageContainer.style.top = '0';
-                }
-
-            }
-        })
     }
 
     render({ text, reports, scores }) {
@@ -67,12 +45,6 @@ class Table {
         }
 
         this.el.querySelector('tbody').innerHTML = result;
-    }
-
-    populateTemplate(str, data) {
-        return str.replace(/{{(.*?)}}/g, (match, match2) => {
-            return data[match2.trim()]
-        })
     }
 
     prepareDataForTemplate (items) {
