@@ -7,6 +7,32 @@ class Table {
             noContent: document.querySelector('#table-no-content').innerHTML,
             reportLabel: document.querySelector('#report-label').innerHTML,
         }
+
+        this.el.addEventListener('mouseover', ({ target }) => {
+            if (target.classList.contains('report-image-icon')) {
+                const { innerHeight } = window;
+                const { x, width, y, height } = target.getBoundingClientRect();
+                const { x: cellX } = target.parentNode.getBoundingClientRect();
+                const cameraPos = y + height;
+
+                const imageContainer = document.querySelector(`#${target.getAttribute('data-target')}`);
+
+                imageContainer.style.bottom = null;
+                imageContainer.style.top = null;
+                imageContainer.style.left = null;
+
+                const { y: imgY, height: imageH } = imageContainer.getBoundingClientRect();
+
+                imageContainer.style.left = `${x + width - cellX}px`;
+
+                if (innerHeight < imgY + imageH) {
+                    imageContainer.style.bottom = '0';
+                } else {
+                    imageContainer.style.top = '0';
+                }
+
+            }
+        })
     }
 
     render({ text, reports, scores }) {
@@ -50,19 +76,23 @@ class Table {
     }
 
     prepareDataForTemplate (items) {
-        return items.map((item) => {
-            const { rating, comment, labels, computed_browser } = item;
+        return items.map((item, i) => {
+            const { rating, comment, labels, images, computed_browser } = item;
             const { Browser: browser, Platform: platform, Version: version } = computed_browser;
             const device = ['Android', 'iOS'].indexOf(platform) != -1 ? 'Mobile' : 'Desktop';
+
+            const image = this.selectImage(images);
 
             return {
                 rating,
                 comment,
                 browser,
+                image,
                 labels,
                 version,
                 device,
                 platform,
+                i,
             };
         })
     }
@@ -86,6 +116,10 @@ class Table {
         }
 
         return filteredItems;
+    }
+
+    selectImage(images) {
+        return images.cropped.url
     }
 }
 

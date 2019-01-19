@@ -121,6 +121,28 @@ html, body {
     text-align: center;
 }
 
+.report-table__cell {
+    position: relative;
+}
+
+.report-image-icon {
+    width: 25px;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.report-image-content {
+    display: none;
+    position: absolute;
+    padding: 10px;
+    background: #FFF;
+    z-index: 1;
+}
+
+.report-image-icon:hover ~ .report-image-content {
+    display: block;
+}
+
 .report__label {
     background: #666;
     color: #FFF;
