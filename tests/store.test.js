@@ -22,14 +22,11 @@ describe('Testing Store', () => {
 
     test('watch adds callback and test Set', () => {
 
-        let stateChangedCount = 0;
-
         const  store = new Store({
             test: true,
         });
 
         const cb = function () {
-            stateChangedCount++;
         };
 
         store.watch(cb);
